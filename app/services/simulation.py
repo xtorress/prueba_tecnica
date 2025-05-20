@@ -1,8 +1,11 @@
+import random
+
 from models.agents import Agent
 from models.market import Market
 from models.politics import RandomPolitic, TrendPolitic, AntiTrendPolitic, PersonalPolitic
+from logging_config import setup_logger
 
-import random
+logger = setup_logger(__name__)
 
 class Simulation():
     """Class for simulation."""
@@ -29,10 +32,11 @@ class Simulation():
         for _ in range(n_anti_trend_agents):
             self.agents.append(Agent(f"AAT-{agent_id}", AntiTrendPolitic()))
 
-    # def run(self):
-    #     for i in range(self.iterations):
-    #         random.shuffle(self.agents)
-    #         for agent in self.agents:
-    #             agent.take_action(self.market)
-    #         self.market.update_market()
-
+    def run(self):
+        for i in range(self.iterations):
+            logger.info(f"Iteration {i}")
+            random.shuffle(self.agents)
+            for agent in self.agents:
+                agent.take_action(self.market)
+            logger.info(f"previouse: {self.market.previous_price} current: {self.market.current_price}")
+            self.market.update_market()

@@ -1,9 +1,12 @@
 from abc import abstractmethod, ABC
 import random
-import logging
+
+from logging_config import setup_logger
+
+logger = setup_logger(__name__)
 
 class Market:
-    def __init__(self, start_price=200, stock=100000):
+    def __init__(self, start_price=200, stock=15):
         self.start_price = start_price
         self.stock = stock
         self.current_price = start_price
@@ -19,6 +22,7 @@ class Market:
             self.current_price += 0.005 * self.current_price
             return True
         else:
+            logger.warning("No hay stock.")
             return False
 
     def get_change_price(self) -> float:
