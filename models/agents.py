@@ -18,11 +18,11 @@ class Agent():
 
     def take_action(self, market: Market):
         action = self.politic.action(market)
-        if action == "BUY" and self.balance >= market.current_price and market.stock > 0:
-            self.balance -= market.current_price
-            self.cards += 1
-            market.sell_card()
-        elif action == "SELL" and self.cards > 0 and market.stock >= 1:
+        if action == "BUY" and self.balance >= market.current_price:
+            if market.sell_card():
+                self.balance -= market.current_price
+                self.cards += 1
+        elif action == "SELL" and self.cards > 0:
             self.balance += market.current_price
             self.cards -= 1
             market.buy_card()
