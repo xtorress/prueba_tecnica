@@ -1,6 +1,5 @@
 from models.agents import Agent
 from models.market import Market
-from models.card import GraphicCard
 from models.politics import RandomPolitic, TrendPolitic, AntiTrendPolitic, PersonalPolitic
 
 import random
@@ -31,7 +30,9 @@ class Simulation():
             self.agents.append(Agent(f"AAT-{agent_id}", AntiTrendPolitic()))
 
     # def run(self):
-    #     for i in self.iterations:
+    #     for i in range(self.iterations):
     #         random.shuffle(self.agents)
     #         for agent in self.agents:
-    #             agent.action()
+    #             agent.take_action(self.market)
+    #         self.market.update_market()
+
