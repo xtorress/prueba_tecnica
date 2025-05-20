@@ -1,7 +1,7 @@
 import pytest
 
 from models.agents import Agent
-from models.market import RandomPolitic, TrendPolitic, AntiTrendPolitic, PersonalPolitic 
+from models.politics import RandomPolitic, TrendPolitic, AntiTrendPolitic, PersonalPolitic 
 
 # @pytest.fixture
 # def RandomAgent():

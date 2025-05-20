@@ -1,7 +1,7 @@
 import pytest
 import random
 
-from models.market import RandomPolitic, TrendPolitic, AntiTrendPolitic, PersonalPolitic
+from models.politics import RandomPolitic, TrendPolitic, AntiTrendPolitic, PersonalPolitic
 
 def test_random_politic_returns_valid_action():
     policy = RandomPolitic()
