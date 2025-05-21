@@ -48,4 +48,4 @@ class Simulation():
                 agent.take_action(self.market)
             logger.info(f"previouse: {self.market.previous_price} current: {self.market.current_price}")
             self.market.update_market()
-        logger.info(f"Agent perosonal: {self.personal_agent.balance}")
+        logger.warning(f"Agent perosonal: {self.personal_agent.balance}, cards: {self.personal_agent.cards}")

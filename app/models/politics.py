@@ -48,17 +48,16 @@ class PersonalPolitic(Politic):
     
     def action(self, price_change: Decimal):
 
+        price_change_trend = 0
         if self.trend_price(price_change):
-            price_change_tren = sum(self._price_trend)
-        else:
-            price_change_tren = price_change
-        
-        if price_change_tren < 0:   
+            price_change_trend = sum(self._price_trend)
+
+        if price_change_trend < 0 and price_change <= -0.01:   
             return "BUY"
-        elif price_change_tren == 0:
-            return "PASS"
-        else:
+        elif price_change_trend > 0 and price_change >= 0.01:
             return "SELL"
+        else:
+            return "PASS"
         
     def trend_price(self, price):
         self._current_iteration += 1

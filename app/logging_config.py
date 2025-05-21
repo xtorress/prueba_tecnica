@@ -2,7 +2,7 @@ import logging
 
 def setup_logger(name="Market_Simulation"):
     logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.WARNING)
 
     if not logger.handlers:
         formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s | %(message)s')
