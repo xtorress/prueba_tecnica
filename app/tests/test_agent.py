@@ -1,123 +1,111 @@
 import pytest
+from decimal import Decimal
 from unittest.mock import MagicMock
 
 from models.agents import Agent
 from models.politics import Politic
 
-class DummyBuyPolitic(Politic):
-    def action(self, market):
-        return "BUY"
+class DummyPolitic:
+    def __init__(self, action_return):
+        self._action_return = action_return
 
-class DummySellPolitic(Politic):
-    def action(self, market):
-        return "SELL"
+    def action(self, price_change):
+        return self._action_return
 
-class DummyPassPolitic(Politic):
-    def action(self, market):
-        return "PASS"
-
-# --- action method ---
-
-# def test_agent_action_returns_policy_action():
-#     market = MagicMock()
-#     policy = MagicMock()
-#     policy.action.return_value = "SELL"
-#     agent = Agent("A1", policy)
-
-#     result = agent.take_action(market)
-
-#     assert result == "SELL"
-#     policy.action.assert_called_once_with(market)
-
-
-# --- take_action method ---
-
-def test_agent_buys_card_if_enough_balance_and_stock():
+@pytest.fixture
+def market_mock():
     market = MagicMock()
-    market.current_price = 100
-    market.sell_card.return_value = True
+    market.current_price = Decimal('100')
+    market.price_change = Decimal('0.01')
+    return market
 
-    agent = Agent("Buyer", DummyBuyPolitic())
-    agent.balance = 200
-    agent.cards = 0
+def test_buy_success(market_mock):
+    politic = DummyPolitic("BUY")
+    agent = Agent("TestAgent", politic)
 
-    agent.take_action(market)
+    # Configuramos buy_card para que funcione (devuelva True)
+    market_mock.buy_card.return_value = True
 
-    assert agent.balance == 100
+    result = agent.take_action(market_mock)
+
+    assert result == "BUY"
     assert agent.cards == 1
-    market.sell_card.assert_called_once()
+    assert agent.balance == Decimal('900')  # 1000 - 100
+    market_mock.buy_card.assert_called_once()
 
-def test_agent_does_not_buy_if_no_stock():
-    market = MagicMock()
-    market.current_price = 100
-    market.sell_card.return_value = False
+def test_buy_insufficient_balance(market_mock):
+    politic = DummyPolitic("BUY")
+    agent = Agent("TestAgent", politic)
+    agent._balance = Decimal('50')  # Menor que current_price (100)
 
-    agent = Agent("NoStockBuyer", DummyBuyPolitic())
-    agent.balance = 200
-    agent.cards = 0
+    result = agent.take_action(market_mock)
 
-    agent.take_action(market)
-
-    assert agent.balance == 200  # no change
+    assert result is None
     assert agent.cards == 0
-    market.sell_card.assert_called_once()
+    assert agent.balance == Decimal('50')
+    market_mock.buy_card.assert_not_called()
 
-def test_agent_does_not_buy_if_not_enough_balance():
-    market = MagicMock()
-    market.current_price = 100
-    market.sell_card.return_value = True
+def test_buy_no_stock(market_mock):
+    politic = DummyPolitic("BUY")
+    agent = Agent("TestAgent", politic)
 
-    agent = Agent("PoorBuyer", DummyBuyPolitic())
-    agent.balance = 50  # not enough
-    agent.cards = 0
+    market_mock.buy_card.return_value = False
 
-    agent.take_action(market)
+    result = agent.take_action(market_mock)
 
-    assert agent.balance == 50
+    assert result is None
     assert agent.cards == 0
-    market.sell_card.assert_not_called()
+    assert agent.balance == Decimal('1000')
+    market_mock.buy_card.assert_called_once()
 
+def test_sell_success(market_mock):
+    politic = DummyPolitic("SELL")
+    agent = Agent("TestAgent", politic)
 
-def test_agent_sells_card_if_has_card():
-    market = MagicMock()
-    market.current_price = 150
+    # Ponemos 1 tarjeta para poder vender
+    agent._cards = 1
+    market_mock.sell_card.return_value = True
 
-    agent = Agent("Seller", DummySellPolitic())
-    agent.cards = 1
-    agent.balance = 500
+    result = agent.take_action(market_mock)
 
-    agent.take_action(market)
-
-    assert agent.balance == 650
+    assert result == "SELL"
     assert agent.cards == 0
-    market.buy_card.assert_called_once()
+    assert agent.balance == Decimal('1100')  # 1000 + 100
+    market_mock.sell_card.assert_called_once()
 
-def test_agent_does_not_sell_if_no_cards():
-    market = MagicMock()
-    market.current_price = 150
+def test_sell_no_cards(market_mock):
+    politic = DummyPolitic("SELL")
+    agent = Agent("TestAgent", politic)
+    agent._cards = 0
 
-    agent = Agent("NoCards", DummySellPolitic())
-    agent.cards = 0
-    agent.balance = 500
+    result = agent.take_action(market_mock)
 
-    agent.take_action(market)
-
-    assert agent.balance == 500
+    assert result is None
     assert agent.cards == 0
-    market.buy_card.assert_not_called()
+    assert agent.balance == Decimal('1000')
+    market_mock.sell_card.assert_not_called()
 
+def test_sell_market_sell_card_false(market_mock):
+    politic = DummyPolitic("SELL")
+    agent = Agent("TestAgent", politic)
+    agent._cards = 1
+    market_mock.sell_card.return_value = False
 
-def test_agent_passes_does_nothing():
-    market = MagicMock()
-    market.current_price = 200
+    result = agent.take_action(market_mock)
 
-    agent = Agent("Passive", DummyPassPolitic())
-    agent.cards = 5
-    agent.balance = 300
+    assert result == "SELL"
+    assert agent.cards == 0
+    assert agent.balance == Decimal('1100')
+    market_mock.sell_card.assert_called_once()
 
-    agent.take_action(market)
+def test_no_action(market_mock):
+    politic = DummyPolitic("HOLD")  # Acción que no es BUY ni SELL
+    agent = Agent("TestAgent", politic)
 
-    assert agent.balance == 300
-    assert agent.cards == 5
-    market.sell_card.assert_not_called()
-    market.buy_card.assert_not_called()
+    result = agent.take_action(market_mock)
+
+    assert result is None
+    assert agent.cards == 0
+    assert agent.balance == Decimal('1000')
+    market_mock.buy_card.assert_not_called()
+    market_mock.sell_card.assert_not_called()

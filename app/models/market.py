@@ -52,6 +52,8 @@ class Market:
         """
         Process the sale of a graphics card.
         """
+        # Agregar atributo self._account = 0, para un flujo correcto de mercado
+        # validar si el mercado tiene saldo self.account > self.current_price
         self._stock += 1
         self._adjust_price(self.PRICE_DECREASE)
         return True
