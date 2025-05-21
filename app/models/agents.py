@@ -39,7 +39,7 @@ class Agent():
         elif action == "SELL":
             return self._sell_card(market)
         else:
-            logger.info("Agente no hizo nada.")
+            logger.info(f"Agente {self.name} no hizo nada.")
             return None
 
     def _buy_card(self, market: Market):
