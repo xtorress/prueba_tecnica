@@ -17,6 +17,12 @@ def test_buy_card(TheMarket):
     assert TheMarket.stock == 14
     assert TheMarket.current_price == 201
 
+def test_buy_card_no_stock(TheMarket):
+    TheMarket._stock = 0
+    TheMarket.buy_card()
+    assert TheMarket.stock == 0
+    assert TheMarket.current_price == 200
+
 def test_sell_card(TheMarket):
     TheMarket.sell_card()
     assert TheMarket.stock == 16
