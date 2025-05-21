@@ -28,9 +28,6 @@ def test_sell_card(TheMarket):
     assert TheMarket.stock == 16
     assert TheMarket.current_price == 199
 
-def test_sell_card_no_stock(TheMarket):
-    pass
-
 def test_get_change_price_down(TheMarket):
     TheMarket._previous_price = Decimal('201')
     TheMarket._current_price = Decimal('200')
@@ -50,4 +47,8 @@ def test_get_change_price_up(TheMarket):
     assert result == Decimal('0.00')
 
 def test_update_market(TheMarket):
-    pass
+    TheMarket._previous_price = Decimal('200')
+    TheMarket._current_price = Decimal('199')
+    TheMarket.update_market()
+    assert TheMarket.price_change == Decimal('-0.005')
+    assert TheMarket.previous_price == Decimal('199')
