@@ -40,5 +40,32 @@ class AntiTrendPolitic(Politic):
 class PersonalPolitic(Politic):
     """Class of policy for agent with logic defined by me."""
 
+    def __init__(self, n_iterations):
+        self.n_iterations: int = n_iterations
+        self._current_iteration: int = 0
+        self._price_trend = []
+        self._size_trend_list = 4
+    
     def action(self, price_change: Decimal):
-        pass
+
+        if self.trend_price(price_change):
+            price_change_tren = sum(self._price_trend)
+        else:
+            price_change_tren = price_change
+        
+        if price_change_tren < 0:   
+            return "SELL"
+        elif price_change_tren == 0:
+            return "PASS"
+        else:
+            return "BUY"
+        
+    def trend_price(self, price):
+        self._current_iteration += 1
+        self._price_trend.append(price)
+
+        if len(self._price_trend) == self._size_trend_list:
+            self._price_trend.pop(0)
+            return True
+        else:
+            return False

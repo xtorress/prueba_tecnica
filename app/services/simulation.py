@@ -15,6 +15,7 @@ class Simulation():
                 n_random_agents: int = 51,
                 n_trend_agents: int = 24,
                 n_anti_trend_agents: int = 24,
+                n_personal_agents: int = 1,
                 iterations: int = 1000):
         self.market = Market()
         self.agents: dict[Agent] = []
@@ -34,6 +35,11 @@ class Simulation():
         for _ in range(n_anti_trend_agents):
             agent_id += 1
             self.agents.append(Agent(f"AAT-{agent_id}", AntiTrendPolitic()))
+        
+        for _ in range(n_personal_agents):
+            agent_id += 1
+            self.agents.append(Agent(f"MY-AGENT-{agent_id}", PersonalPolitic()))
+
 
     def run(self):
         for i in range(self.iterations):
