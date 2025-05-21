@@ -24,12 +24,15 @@ class Simulation():
         agent_id = 0
         
         for _ in range(n_random_agents):
+            agent_id += 1
             self.agents.append(Agent(f"AR-{agent_id}", RandomPolitic()))
         
         for _ in range(n_trend_agents):
+            agent_id += 1
             self.agents.append(Agent(f"AT-{agent_id}", TrendPolitic()))
 
         for _ in range(n_anti_trend_agents):
+            agent_id += 1
             self.agents.append(Agent(f"AAT-{agent_id}", AntiTrendPolitic()))
 
     def run(self):
