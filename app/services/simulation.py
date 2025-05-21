@@ -10,8 +10,6 @@ logger = setup_logger(__name__)
 class Simulation():
     """Class for simulation."""
     def __init__(self,
-                start_price: float = 200,
-                #stock: int = 100000,
                 n_random_agents: int = 51,
                 n_trend_agents: int = 24,
                 n_anti_trend_agents: int = 24,
@@ -38,7 +36,8 @@ class Simulation():
         
         for _ in range(n_personal_agents):
             agent_id += 1
-            self.agents.append(Agent(f"MY-AGENT-{agent_id}", PersonalPolitic(self.iterations)))
+            self.personal_agent = Agent(f"MY-AGENT-{agent_id}", PersonalPolitic(self.iterations))
+            self.agents.append(self.personal_agent)
 
 
     def run(self):
@@ -49,3 +48,4 @@ class Simulation():
                 agent.take_action(self.market)
             logger.info(f"previouse: {self.market.previous_price} current: {self.market.current_price}")
             self.market.update_market()
+        logger.info(f"Agent perosonal: {self.personal_agent.balance}")

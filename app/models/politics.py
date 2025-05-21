@@ -54,11 +54,11 @@ class PersonalPolitic(Politic):
             price_change_tren = price_change
         
         if price_change_tren < 0:   
-            return "SELL"
+            return "BUY"
         elif price_change_tren == 0:
             return "PASS"
         else:
-            return "BUY"
+            return "SELL"
         
     def trend_price(self, price):
         self._current_iteration += 1

@@ -14,7 +14,6 @@ class Agent():
         self._name: str = name
         self._politic: Politic = politic
         self._balance: Decimal = Decimal('1000')
-        self._init_balance: Decimal = Decimal('1000')
         self._cards: int = 0
 
     @property
