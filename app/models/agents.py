@@ -16,11 +16,11 @@ class Agent():
         self.init_balance = 1000
         self.cards = 0
 
-    def action(self, market: Market):
-        return self.politic.action(market)
+    # def action(self, market: Market):
+    #     return self.politic.action(market)
 
     def take_action(self, market: Market):
-        action = self.politic.action(market)
+        action = self.politic.action(market.price_change)
         if action == "BUY" and self.balance >= market.current_price:
             if market.sell_card():
                 self.balance -= market.current_price
