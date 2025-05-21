@@ -38,7 +38,7 @@ class Simulation():
         
         for _ in range(n_personal_agents):
             agent_id += 1
-            self.agents.append(Agent(f"MY-AGENT-{agent_id}", PersonalPolitic()))
+            self.agents.append(Agent(f"MY-AGENT-{agent_id}", PersonalPolitic(self.iterations)))
 
 
     def run(self):
