@@ -16,6 +16,7 @@ class Market:
         self._current_price: Decimal = Decimal(str(start_price))
         self._previous_price: Decimal = Decimal(str(start_price))
         self._price_change: Decimal = 0.000
+        self._iteration: int = 0
 
     @property
     def stock(self) -> int:
@@ -32,6 +33,10 @@ class Market:
     @property
     def price_change(self) -> Decimal:
         return self._price_change
+    
+    @property
+    def iteration(self) -> int:
+        return self._iteration
     
     def _adjust_price(self, percent: Decimal) -> None:
         self._current_price *= percent
@@ -73,3 +78,4 @@ class Market:
         """
         self._price_change = self.get_change_price()
         self._previous_price = self._current_price
+        self._iteration += 1
