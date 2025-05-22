@@ -69,5 +69,5 @@ class Agent():
         return "SELL"        
 
 
-class PersonalAgent(Agent):
-    pass
+# class PersonalAgent(Agent):
+#     pass

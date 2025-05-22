@@ -55,6 +55,9 @@ class PersonalPolitic(Politic):
         if self.trend_price(price_change_market):
             price_change_trend = sum(self._price_trend)
 
+        if market_context.iteration <= 10:
+            return "BUY"
+        
         if price_change_trend <= 0 and price_change_market <= -0.01:   
             return "BUY"
         elif price_change_trend > 0 and price_change_market >= 0.01:
