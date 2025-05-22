@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from dataclasses import dataclass
 from decimal import Decimal
 import random
 
@@ -6,14 +7,14 @@ from logging_config import setup_logger
 
 logger = setup_logger(__name__)
 
+@dataclass(frozen=True)
 class MarketContext:
     """Class to get the context market."""
-    def __init__(self, stock, current_price, previous_price, price_change, iteration):
-        self.stock = stock
-        self.current_price: Decimal = current_price
-        self.previous_price: Decimal = previous_price
-        self.price_change: Decimal = price_change
-        self.iteration: int = iteration
+    stock: int
+    current_price: Decimal
+    previous_price: Decimal
+    price_change: Decimal
+    iteration: int
 
 class Market:
     """Market class. Represents the graphics card market"""
