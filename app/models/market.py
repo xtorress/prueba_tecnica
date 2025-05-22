@@ -6,6 +6,15 @@ from logging_config import setup_logger
 
 logger = setup_logger(__name__)
 
+class MarketContext:
+    """Class to get the context market."""
+    def __init__(self, stock, current_price, previous_price, price_change, iteration):
+        self.stock = stock
+        self.current_price: Decimal = current_price
+        self.previous_price: Decimal = previous_price
+        self.price_change: Decimal = price_change
+        self.iteration: int = iteration
+
 class Market:
     """Market class. Represents the graphics card market"""
     PRICE_INCREASE = Decimal('1.005')
@@ -72,6 +81,17 @@ class Market:
             return Decimal('0.000')
         return round((self._current_price - self._previous_price) / self._previous_price, 3)
     
+    def get_context(self) -> MarketContext:
+        """
+        Method to send the market context at the beginning of the iteration.
+        """
+        return MarketContext(
+            self.current_price, 
+            self.previous_price, 
+            self.price_change, 
+            self.iteration
+            )
+
     def update_market(self):
         """
         Update the market.
