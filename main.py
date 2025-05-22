@@ -5,6 +5,7 @@ def main():
     print("----------------------")
     simulation = Simulation()
     simulation.run()
+    print(simulation.personal_agent.balance)
     print("Simulación terminada")
 
 
