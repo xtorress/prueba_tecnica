@@ -32,7 +32,8 @@ class Agent():
     #     return self.politic.action(market)
     
     def take_action(self, market: Market):
-        action = self._politic.action(market.price_change)
+        market_context = market.get_context()
+        action = self._politic.action(market_context)
         if action == "BUY":
             return self._buy_card(market)
         elif action == "SELL":
@@ -66,3 +67,7 @@ class Agent():
         self._balance += market.current_price
         self._cards -= 1
         return "SELL"        
+
+
+class PersonalAgent(Agent):
+    pass
