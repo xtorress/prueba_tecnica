@@ -72,7 +72,7 @@ class Market:
         self._adjust_price(self.PRICE_DECREASE)
         return True
 
-    def get_change_price(self) -> Decimal:
+    def _get_change_price(self) -> Decimal:
         """
         Calculates the change in price with respect to the previous iteration.
         """
@@ -86,6 +86,7 @@ class Market:
         Method to send the market context at the beginning of the iteration.
         """
         return MarketContext(
+            self.stock,
             self.current_price, 
             self.previous_price, 
             self.price_change, 
@@ -96,6 +97,6 @@ class Market:
         """
         Update the market.
         """
-        self._price_change = self.get_change_price()
+        self._price_change = self._get_change_price()
         self._previous_price = self._current_price
         self._iteration += 1
