@@ -1,13 +1,19 @@
-from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from enum import Enum
 from decimal import Decimal
 import random
 
 from models.politics import Politic
-from models.market import Market
+from models.market import Market, MarketContext
 from logging_config import setup_logger
 
 logger = setup_logger(__name__)
+
+# @dataclass(frozen=True)
+# class AgentContext:
+#     market_context: MarketContext
+#     cards: int
+
 
 class Agent():
     def __init__(self, name:str, politic: Politic):
