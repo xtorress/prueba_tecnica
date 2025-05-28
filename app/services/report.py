@@ -1,5 +1,4 @@
 from typing import List
-import pandas as pd
 
 from models.agents import Agent
 from models.politics import PersonalPolitic
