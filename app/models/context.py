@@ -14,4 +14,7 @@ class MarketContext:
 @dataclass(frozen=True)
 class AgentContext:
     market_context: MarketContext
+    name: str
+    politic: str
+    balance: Decimal
     cards: int
