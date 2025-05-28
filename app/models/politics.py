@@ -14,6 +14,9 @@ class Politic(ABC):
     def action(self, agent_context):
         pass
 
+    def __str__(self):
+        return self.__class__.__name__
+
 
 class RandomPolitic(Politic):
     """Class for random agent policies."""
