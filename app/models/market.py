@@ -3,19 +3,10 @@ from dataclasses import dataclass
 from decimal import Decimal
 import random
 
+from models.context import MarketContext
 from logging_config import setup_logger
 
 logger = setup_logger(__name__)
-
-@dataclass(frozen=True)
-class MarketContext:
-    """Class to get the context market."""
-    stock: int
-    current_price: Decimal
-    previous_price: Decimal
-    price_change: Decimal
-    iteration: int
-
 
 class Market:
     """Market class. Represents the graphics card market"""
