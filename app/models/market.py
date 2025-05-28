@@ -1,5 +1,4 @@
 from decimal import Decimal, ROUND_HALF_UP
-import random
 
 from models.context import MarketContext
 from logging_config import setup_logger
@@ -40,6 +39,12 @@ class Market:
     def price_change(self) -> Decimal:
         return self._price_change
     
+    @price_change.setter
+    def price_change(self, p_change):
+        if not isinstance(p_change, Decimal):
+            p_change = Decimal(str(p_change))
+        self._price_change = p_change.quantize(Decimal('0.001'), rounding=ROUND_HALF_UP)
+    
     @property
     def iteration(self) -> int:
         return self._iteration
@@ -76,7 +81,8 @@ class Market:
         if self.previous_price == 0:
             logger.warning('Precio es 0.')
             return Decimal('0.000')
-        return round((self.current_price- self._previous_price) / self._previous_price, 3)
+        result = (self.current_price- self._previous_price) / self._previous_price
+        return Decimal(str(result)).quantize(Decimal('0.001'), rounding=ROUND_HALF_UP)
     
     def get_context(self) -> MarketContext:
         """
@@ -94,6 +100,6 @@ class Market:
         """
         Update the market.
         """
-        self._price_change = self._get_change_price()
+        self.price_change = self._get_change_price()
         self._previous_price = self.current_price
         self._iteration += 1
