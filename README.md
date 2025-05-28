@@ -36,6 +36,10 @@ probabilidades de no hacer nada.
 - Cada iteración mezcla los agentes y ejecuta sus acciones
 - Al final de cada iteración se actualiza el mercado
 
+### `GenerateReport`
+- Información final del agente personal.
+- Devuelve el top5 de los agentes con mayor balance al finalizar la simulación.
+
 ---
 
 ## 🚀 Cómo ejecutar
@@ -43,11 +47,17 @@ probabilidades de no hacer nada.
 1. Clona el repositorio.
 2. Configurar proyecto.
 ```bash
-pip install -e.
+pip install -e .
 ```
-
-3. Ejecuta archivo main.py:
-
+3. Instalar dependencias.
+```bash
+pip install -r requirements.txt
+```
+4. Para ejecutar tests.
+```bash
+pytest app/tests
+```
+5. Ejecutar programa:
 ```bash
 python main.py
 ```
