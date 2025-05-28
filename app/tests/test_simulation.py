@@ -8,14 +8,14 @@ from models.politics import RandomPolitic, TrendPolitic, AntiTrendPolitic, Perso
 
 @pytest.fixture
 def simulation():
-    return Simulation(start_price=200,
-                      n_random_agents=5,
+    return Simulation(n_random_agents=5,
                       n_trend_agents=3,
                       n_anti_trend_agents=3,
+                      n_personal_agents=1,
                       iterations=5)
 
 def test_create_agents(simulation):
-    n_agents = 11
+    n_agents = 12
     random_count = sum(1 for agent in simulation.agents if isinstance(agent.politic, RandomPolitic))
     trend_count = sum(1 for agent in simulation.agents if isinstance(agent.politic, TrendPolitic))
     anti_trend_count = sum(1 for agent in simulation.agents if isinstance(agent.politic, AntiTrendPolitic))
@@ -27,9 +27,9 @@ def test_create_agents(simulation):
 
 def test_simulation_initial_agent_count():
     """Test that the correct number of agents are created."""
-    sim = Simulation(n_random_agents=10, n_trend_agents=5, n_anti_trend_agents=5)
+    sim = Simulation(n_random_agents=10, n_trend_agents=5, n_anti_trend_agents=5, n_personal_agents=1)
 
-    assert len(sim.agents) == 20
+    assert len(sim.agents) == 21
     assert isinstance(sim.market, Market)
     assert sim.iterations == 1000  # default
 
@@ -47,12 +47,12 @@ def test_simulation_run_calls_take_action(mock_agent_class):
     mock_agent_class.return_value = dummy_agent
 
     # Setup simulation with small numbers
-    sim = Simulation(n_random_agents=2, n_trend_agents=1, n_anti_trend_agents=1, iterations=3)
+    sim = Simulation(n_random_agents=2, n_trend_agents=1, n_anti_trend_agents=1, n_personal_agents=1, iterations=3)
     
     sim.run()
 
     # Assert that take_action was called 4 agents * 3 iterations
-    assert dummy_agent.take_action.call_count == 12
+    assert dummy_agent.take_action.call_count == 15
 
 
 def test_simulation_market_updates(monkeypatch):
