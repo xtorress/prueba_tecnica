@@ -2,28 +2,28 @@ from abc import abstractmethod, ABC
 from decimal import Decimal
 import random
 
-from models.market import MarketContext
+# from models.agents import AgentContext
 
 class Politic(ABC):
     """Abstract class of politics."""
 
     @abstractmethod
-    def action(self, market_context: MarketContext):
+    def action(self, agent_context):
         pass
 
 
 class RandomPolitic(Politic):
     """Class for random agent policies."""
 
-    def action(self, market_context: MarketContext) -> str:
+    def action(self, agent_context) -> str:
         return random.choices(["BUY", "SELL", "PASS"])[0]
 
 
 class TrendPolitic(Politic):
     """Class for tresnd agent policies."""
     
-    def action(self, market_context: MarketContext):
-        if market_context.price_change >= Decimal('0.01'):
+    def action(self, agent_context):
+        if agent_context.market_context.price_change >= Decimal('0.01'):
             return random.choices(["BUY", "PASS"], weights=[0.75, 0.25])[0]
         else:
             return random.choices(["PASS", "SELL"], weights=[0.8, 0.2])[0]
@@ -32,8 +32,8 @@ class TrendPolitic(Politic):
 class AntiTrendPolitic(Politic):
     """Class for anti trend agent policies."""
 
-    def action(self, market_context: MarketContext):
-        if market_context.price_change <= Decimal('-0.01'):
+    def action(self, agent_context):
+        if agent_context.market_context.price_change <= Decimal('-0.01'):
             return random.choices(["BUY", "PASS"], weights=[0.75, 0.25])[0]
         else:
             return random.choices(["PASS", "SELL"], weights=[0.8, 0.2])[0]
@@ -48,14 +48,14 @@ class PersonalPolitic(Politic):
         self._price_trend = []
         self._size_trend_list = 4
     
-    def action(self, market_context: MarketContext):
+    def action(self, agent_context):
 
         price_change_trend = 0
-        price_change_market = market_context.price_change 
+        price_change_market = agent_context.market_context.price_change 
         if self.trend_price(price_change_market):
             price_change_trend = sum(self._price_trend)
 
-        if market_context.iteration <= 10:
+        if agent_context.market_context.iteration <= 10:
             return "BUY"
         
         if price_change_trend <= 0 and price_change_market <= -0.01:   

@@ -9,10 +9,10 @@ from logging_config import setup_logger
 
 logger = setup_logger(__name__)
 
-# @dataclass(frozen=True)
-# class AgentContext:
-#     market_context: MarketContext
-#     cards: int
+@dataclass(frozen=True)
+class AgentContext:
+    market_context: MarketContext
+    cards: int
 
 
 class Agent():
@@ -38,8 +38,8 @@ class Agent():
     #     return self.politic.action(market)
     
     def take_action(self, market: Market):
-        market_context = market.get_context()
-        action = self._politic.action(market_context)
+        agent_context = self._get_context(market.get_context())
+        action = self._politic.action(agent_context)
         if action == "BUY":
             return self._buy_card(market)
         elif action == "SELL":
@@ -73,6 +73,9 @@ class Agent():
         self._balance += market.current_price
         self._cards -= 1
         return "SELL"        
+
+    def _get_context(self, market_context: MarketContext) -> AgentContext:
+        return AgentContext(market_context, self.cards)
 
 
 # class PersonalAgent(Agent):

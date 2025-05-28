@@ -16,6 +16,7 @@ class MarketContext:
     price_change: Decimal
     iteration: int
 
+
 class Market:
     """Market class. Represents the graphics card market"""
     PRICE_INCREASE = Decimal('1.005')
