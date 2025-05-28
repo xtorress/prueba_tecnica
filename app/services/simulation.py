@@ -42,10 +42,12 @@ class Simulation():
 
     def run(self):
         for i in range(self.iterations):
-            logger.info(f"Iteration {i}")
+            logger.info(f"Iteration {i} - Precio {self.market.current_price}")
             random.shuffle(self.agents)
             for agent in self.agents:
                 agent.take_action(self.market)
-            logger.info(f"previouse: {self.market.previous_price} current: {self.market.current_price}")
+            logger.info(f"Agent personal: {self.personal_agent.balance}, " \
+                            f"p_tarjeta: {self.market.current_price}, " \
+                            f"n_tarjeta: {self.personal_agent.cards}")
             self.market.update_market()
-        logger.warning(f"Agent perosonal: {self.personal_agent.balance}, cards: {self.personal_agent.cards}")
+        logger.info(f"Agent perosonal: {self.personal_agent.balance}, cards: {self.personal_agent.cards}")

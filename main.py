@@ -5,7 +5,9 @@ def main():
     print("----------------------")
     simulation = Simulation()
     simulation.run()
-    print(simulation.personal_agent.balance)
+    print("Agente personal")
+    print(f"- Balance final: {simulation.personal_agent.balance}")
+    print(f"- n° tarjetas: {simulation.personal_agent.cards}")
     print("Simulación terminada")
 
 
