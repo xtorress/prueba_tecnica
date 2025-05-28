@@ -70,14 +70,4 @@ class Agent():
         return "SELL"        
 
     def _get_context(self, market_context: MarketContext) -> AgentContext:
-        return AgentContext(
-            market_context, 
-            self.name,
-            self._politic.__str__(),
-            self.balance,
-            self.cards
-            )
-
-
-# class PersonalAgent(Agent):
-#     pass
+        return AgentContext(market_context, self.cards)
