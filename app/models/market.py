@@ -1,6 +1,4 @@
-from abc import abstractmethod, ABC
-from dataclasses import dataclass
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 import random
 
 from models.context import MarketContext
@@ -28,6 +26,12 @@ class Market:
     def current_price(self) -> Decimal:
         return self._current_price
     
+    @current_price.setter
+    def current_price(self, new_price):
+        if not isinstance(new_price, Decimal):
+            new_price = Decimal(str(new_price))
+        self._current_price = new_price.quantize(Decimal('0.001'), rounding=ROUND_HALF_UP)
+    
     @property
     def previous_price(self) -> Decimal:
         return self._previous_price
@@ -41,7 +45,7 @@ class Market:
         return self._iteration
     
     def _adjust_price(self, percent: Decimal) -> None:
-        self._current_price *= percent
+        self.current_price *= percent
 
     def buy_card(self) -> bool:
         """
@@ -72,7 +76,7 @@ class Market:
         if self.previous_price == 0:
             logger.warning('Precio es 0.')
             return Decimal('0.000')
-        return round((self._current_price - self._previous_price) / self._previous_price, 3)
+        return round((self.current_price- self._previous_price) / self._previous_price, 3)
     
     def get_context(self) -> MarketContext:
         """
@@ -91,5 +95,5 @@ class Market:
         Update the market.
         """
         self._price_change = self._get_change_price()
-        self._previous_price = self._current_price
+        self._previous_price = self.current_price
         self._iteration += 1
