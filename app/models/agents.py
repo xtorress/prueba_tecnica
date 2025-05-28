@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 import random
 
 from models.politics import Politic
@@ -25,12 +25,19 @@ class Agent():
     def balance(self) -> Decimal:
         return self._balance
     
+    @balance.setter
+    def balance(self, new_balance):
+        if not isinstance(new_balance, Decimal):
+            new_balance = Decimal(str(new_balance))
+        self._balance = new_balance.quantize(Decimal('0.001'), rounding=ROUND_HALF_UP)
+
     @property
     def cards(self) -> int:
         return self._cards
     
-    # def action(self, market: Market):
-    #     return self.politic.action(market)
+    @property
+    def politic(self) -> Politic:
+        return self._politic
     
     def take_action(self, market: Market):
         agent_context = self._get_context(market.get_context())
@@ -52,7 +59,7 @@ class Agent():
             logger.debug(f"Agente {self.name} no pudo comprar, tienda sin stock.")
             return None
         
-        self._balance -= market.current_price
+        self.balance -= market.current_price
         self._cards += 1
         logger.debug(f"Agente {self.name} compro una tarjeta a {market.current_price}")
         return "BUY"
