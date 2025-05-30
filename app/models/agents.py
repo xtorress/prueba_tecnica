@@ -55,11 +55,12 @@ class Agent():
             logger.debug(f"Agente {self.name} no tiene balance suficiente.")
             return None
         
-        if not market.buy_card():
+        cost = market.buy_card()
+        if cost < 0:
             logger.debug(f"Agente {self.name} no pudo comprar, tienda sin stock.")
             return None
         
-        self.balance -= market.current_price
+        self.balance -= cost
         self._cards += 1
         logger.debug(f"Agente {self.name} compro una tarjeta a {market.current_price}")
         return "BUY"
@@ -68,11 +69,9 @@ class Agent():
         if self.cards <= 0:
             logger.debug(f"Agente {self.name} no tiene tarjetas para vender.")
             return None
-
-        if not market.sell_card():
-            logger.debug(f"Falta agregar atributo dinero a Market")
-
-        self._balance += market.current_price
+        
+        income = market.sell_card()
+        self._balance += income
         self._cards -= 1
         return "SELL"        
 
